@@ -1,7 +1,7 @@
 {
     "version": "1.0.0",
     "summary": "Sparkling Heart",
-    "repository": "https://github.com/nicholasren/moco-scala.git",
+    "repository": "https://github.com/nicholasren/sparkling-heart.git",
     "license": "BSD3",
     "source-directories": [
         "."
