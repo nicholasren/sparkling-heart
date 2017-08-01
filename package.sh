@@ -1,4 +1,4 @@
 #!/usr/bin/env bash
-
-tar -C build -czvf app.tgz .
+elm-app build && \
+tar -C build -czvf app.tgz . && \
 mv app.tgz /tmp

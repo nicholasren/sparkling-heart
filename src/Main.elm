@@ -7,7 +7,7 @@ import Html.Attributes exposing (..)
 
 main =
     beginnerProgram
-        { model = emptyModel
+        { model = defaultModel
         , view = view
         , update = update
         }
@@ -20,6 +20,12 @@ type alias Model =
 
 type alias Heart =
     { comment : String
+    }
+
+
+defaultModel : Model
+defaultModel =
+    { hearts = [ newHeart, newHeart, newHeart, newHeart, newHeart ]
     }
 
 
@@ -65,7 +71,12 @@ update msg model =
             }
 
         Decrement ->
-            { hearts = Maybe.withDefault [] (List.tail (model.hearts)) }
+            { hearts =
+                if List.length model.hearts == 1 then
+                    [ newHeart ]
+                else
+                    Maybe.withDefault [] (List.tail (model.hearts))
+            }
 
 
 newHeart : Heart
