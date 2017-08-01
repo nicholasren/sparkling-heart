@@ -1,4 +1,4 @@
-port module SparklingHeart exposing (..)
+module Main exposing (..)
 
 import Html exposing (..)
 import Html.Events exposing (onClick)
@@ -35,11 +35,13 @@ view model =
         [ div [ class "pure-g" ] [ h2 [ class "header" ] [ text "Daisy's sparkling heart" ] ]
         , div [ class "pure-g" ]
             [ div [ class "content" ]
-                [ div [] [ img [ src "./public/daisy.jpg", width 500 ] [] ]
-                , div [ class "hearts" ] (display model)
-                , div []
-                    [ button [ onClick Decrement, class "pure-button pure-1-2" ] [ text "减少" ]
-                    , button [ onClick Increment, class "pure-button pure-1-2" ] [ text "增加" ]
+                [ div [] [ img [ src "./daisy.jpg" ] [] ]
+                , div [ class "pure-g hearts" ] (display model)
+                , div [ class "pure-g" ]
+                    [ div [ class "pure-u-1-2" ]
+                        [ button [ onClick Increment, class "pure-button-primary pure-button" ] [ text "Add" ] ]
+                    , div [ class "pure-u-1-2" ]
+                        [ button [ onClick Decrement, class "pure-button-secondary pure-button" ] [ text "Remove" ] ]
                     ]
                 ]
             ]
@@ -55,7 +57,12 @@ update : Msg -> Model -> Model
 update msg model =
     case msg of
         Increment ->
-            { hearts = model.hearts ++ [ newHeart ] }
+            { hearts =
+                if List.length model.hearts < 5 then
+                    model.hearts ++ [ newHeart ]
+                else
+                    model.hearts
+            }
 
         Decrement ->
             { hearts = Maybe.withDefault [] (List.tail (model.hearts)) }
