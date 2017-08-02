@@ -37,19 +37,15 @@ emptyModel =
 
 view : Model -> Html Msg
 view model =
-    div []
-        [ div [ class "pure-g" ] [ h2 [ class "header" ] [ text "Daisy's sparkling heart" ] ]
-        , div [ class "pure-g" ]
-            [ div [ class "content" ]
-                [ div [] [ img [ src "./daisy.jpg" ] [] ]
-                , div [ class "pure-g hearts" ] (display model)
-                , div [ class "pure-g" ]
-                    [ div [ class "pure-u-1-2" ]
-                        [ button [ onClick Increment, class "pure-button-primary pure-button" ] [ text "Add" ] ]
-                    , div [ class "pure-u-1-2" ]
-                        [ button [ onClick Decrement, class "pure-button-secondary pure-button" ] [ text "Remove" ] ]
-                    ]
-                ]
+    div [ class ".container-fluid" ]
+        [ div [ class "row" ] [ h3 [ class "header" ] [ text "Daisy's sparkling heart" ] ]
+        , div [ class "row" ] [ img [ src "./daisy.jpg" ] [] ]
+        , div [ class "row" ] (display model)
+        , div [ class "row" ]
+            [ div [ class "col-xs-6" ]
+                [ button [ onClick Increment, class "btn btn-primary" ] [ text "Add" ] ]
+            , div [ class "col-xs-6" ]
+                [ button [ onClick Decrement, class "btn btn-success" ] [ text "Remove" ] ]
             ]
         ]
 

@@ -8,19 +8,9 @@ body {
 
 img {
   margin: 20px 0;
-  max-width: 500px;
+  max-width: 100%;
 }
 
-.content {
-    padding: 2em 3em 0;
-    margin: 0px auto;
-}
-
-.hearts {
-    letter-spacing: 1em
-}
-
-.header {
-    letter-spacing: 0em;
-    margin: 0px auto;
+.btn {
+    width: 80%;
 }
