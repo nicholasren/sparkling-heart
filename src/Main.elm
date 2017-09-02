@@ -126,7 +126,7 @@ display model =
 
 increased : Model -> List Heart
 increased model =
-    if List.length model.hearts < 5 then
+    if List.length model.hearts < 10 then
         model.hearts ++ [ heart ]
     else
         model.hearts
