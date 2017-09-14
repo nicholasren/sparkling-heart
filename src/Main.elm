@@ -29,6 +29,7 @@ type Msg
 
 type alias Model =
     { hearts : List Heart
+    , courage : Int
     }
 
 
@@ -46,7 +47,8 @@ view model =
     div [ class ".container-fluid" ]
         [ div [ class "row" ] [ h3 [ class "header" ] [ text "Daisy's sparkling heart" ] ]
         , div [ class "row" ] [ img [ src "./img/daisy.jpg" ] [] ]
-        , div [ class "row" ] (display model)
+        , div [ class "row" ] (displayHearts model)
+        , div [ class "row" ] (displayCourage model)
         , div [ class "row" ]
             [ div [ class "col-xs-6" ]
                 [ button [ onClick Increment, class "btn btn-primary" ] [ text "Add" ] ]
@@ -64,15 +66,12 @@ update : Msg -> Model -> ( Model, Cmd Msg )
 update msg model =
     case msg of
         Increment ->
-            ( { hearts =
-                    increased (model)
-              }
+            ( heartIncreased (model)
             , Cmd.none
             )
 
         Decrement ->
-            ( { hearts = decreased (model)
-              }
+            ( heartDecreased (model)
             , Cmd.none
             )
 
@@ -103,12 +102,14 @@ init =
 defaultModel : Model
 defaultModel =
     { hearts = List.map (\n -> heart) (List.range 1 5)
+    , courage = 5
     }
 
 
 emptyModel : Model
 emptyModel =
     { hearts = []
+    , courage = 5
     }
 
 
@@ -118,25 +119,45 @@ heart =
     }
 
 
-display : Model -> List (Html msg)
-display model =
+displayHearts : Model -> List (Html msg)
+displayHearts model =
     model.hearts
         |> List.map (\h -> span [] [ text "💖" ])
 
 
-increased : Model -> List Heart
-increased model =
-    if List.length model.hearts < 10 then
-        model.hearts ++ [ heart ]
+displayCourage : Model -> List (Html msg)
+displayCourage model =
+    List.range 1 model.courage
+        |> List.map (\c -> span [] [ text "💪" ])
+
+
+heartIncreased : Model -> Model
+heartIncreased model =
+    { hearts = inc (model.hearts)
+    , courage = model.courage
+    }
+
+
+heartDecreased : Model -> Model
+heartDecreased model =
+    { hearts = dec (model.hearts)
+    , courage = model.courage
+    }
+
+
+inc : List Heart -> List Heart
+inc hearts =
+    if List.length hearts < 10 then
+        hearts ++ [ heart ]
     else
-        model.hearts
+        hearts
 
 
-decreased : Model -> List Heart
-decreased model =
-    if List.length model.hearts == 1 then
+dec : List Heart -> List Heart
+dec hearts =
+    if List.length hearts == 1 then
         [ heart ]
     else
-        model.hearts
+        hearts
             |> List.tail
             |> Maybe.withDefault [ heart ]
