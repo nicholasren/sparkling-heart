@@ -21,6 +21,12 @@ main =
 type Msg
     = Increment
     | Decrement
+    | ChangeMode
+
+
+type Mode
+    = HeartMode
+    | CourageMode
 
 
 
@@ -28,13 +34,9 @@ type Msg
 
 
 type alias Model =
-    { hearts : List Heart
+    { hearts : Int
     , courage : Int
-    }
-
-
-type alias Heart =
-    { comment : String
+    , mode : Mode
     }
 
 
@@ -55,6 +57,7 @@ view model =
             , div [ class "col-xs-6" ]
                 [ button [ onClick Decrement, class "btn btn-success" ] [ text "Remove" ] ]
             ]
+        , div [ class "row" ] [ button [ onClick ChangeMode ] [ text (displayMode (model)) ] ]
         ]
 
 
@@ -66,12 +69,17 @@ update : Msg -> Model -> ( Model, Cmd Msg )
 update msg model =
     case msg of
         Increment ->
-            ( heartIncreased (model)
+            ( increased (model)
             , Cmd.none
             )
 
         Decrement ->
-            ( heartDecreased (model)
+            ( decreased (model)
+            , Cmd.none
+            )
+
+        ChangeMode ->
+            ( modeChanged (model)
             , Cmd.none
             )
 
@@ -101,28 +109,16 @@ init =
 
 defaultModel : Model
 defaultModel =
-    { hearts = List.map (\n -> heart) (List.range 1 5)
+    { hearts = 5
     , courage = 5
-    }
-
-
-emptyModel : Model
-emptyModel =
-    { hearts = []
-    , courage = 5
-    }
-
-
-heart : Heart
-heart =
-    { comment = "Sparkling"
+    , mode = HeartMode
     }
 
 
 displayHearts : Model -> List (Html msg)
 displayHearts model =
-    model.hearts
-        |> List.map (\h -> span [] [ text "💖" ])
+    List.range 1 model.hearts
+        |> List.map (\c -> span [] [ text "💖" ])
 
 
 displayCourage : Model -> List (Html msg)
@@ -131,33 +127,73 @@ displayCourage model =
         |> List.map (\c -> span [] [ text "💪" ])
 
 
-heartIncreased : Model -> Model
-heartIncreased model =
-    { hearts = inc (model.hearts)
+displayMode : Model -> String
+displayMode model =
+    case model.mode of
+        HeartMode ->
+            "heart"
+
+        CourageMode ->
+            "courage"
+
+
+increased : Model -> Model
+increased model =
+    case model.mode of
+        HeartMode ->
+            { hearts = inc (model.hearts)
+            , courage = model.courage
+            , mode = model.mode
+            }
+
+        CourageMode ->
+            { hearts = model.hearts
+            , courage = inc (model.courage)
+            , mode = model.mode
+            }
+
+
+decreased : Model -> Model
+decreased model =
+    case model.mode of
+        HeartMode ->
+            { hearts = dec (model.hearts)
+            , courage = model.courage
+            , mode = model.mode
+            }
+
+        CourageMode ->
+            { hearts = model.hearts
+            , courage = dec (model.courage)
+            , mode = model.mode
+            }
+
+
+modeChanged : Model -> Model
+modeChanged model =
+    { hearts = model.hearts
     , courage = model.courage
+    , mode =
+        case model.mode of
+            HeartMode ->
+                CourageMode
+
+            CourageMode ->
+                HeartMode
     }
 
 
-heartDecreased : Model -> Model
-heartDecreased model =
-    { hearts = dec (model.hearts)
-    , courage = model.courage
-    }
-
-
-inc : List Heart -> List Heart
-inc hearts =
-    if List.length hearts < 10 then
-        hearts ++ [ heart ]
+inc : Int -> Int
+inc num =
+    if num < 12 then
+        num + 1
     else
-        hearts
+        num
 
 
-dec : List Heart -> List Heart
-dec hearts =
-    if List.length hearts == 1 then
-        [ heart ]
+dec : Int -> Int
+dec num =
+    if num == 1 then
+        num
     else
-        hearts
-            |> List.tail
-            |> Maybe.withDefault [ heart ]
+        num - 1
