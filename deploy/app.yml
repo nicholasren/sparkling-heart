@@ -1,7 +1,0 @@
----
-
-- hosts: pi
-  become: yes
-  roles:
-    - app
-    - nginx

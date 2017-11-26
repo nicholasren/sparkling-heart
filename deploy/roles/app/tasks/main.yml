@@ -1,3 +1,0 @@
-- unarchive:
-    src: /tmp/app.tgz
-    dest: /var/www/html
