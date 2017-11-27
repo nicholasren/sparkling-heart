@@ -57,7 +57,7 @@ view model =
             , div [ class "col-xs-6" ]
                 [ button [ onClick Decrement, class "btn btn-success" ] [ text "Remove" ] ]
             ]
-        , div [ class "row" ] [ button [ onClick ChangeMode ] [ text (displayMode (model)) ] ]
+        , div [ class "row" ] [ button [ onClick ChangeMode, class "btn btn-info" ] [ text (displayMode (model)) ] ]
         ]
 
 
